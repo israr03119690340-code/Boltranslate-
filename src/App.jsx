@@ -41,7 +41,8 @@ export default function App() {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('apikey', 'helloworld');
-    formData.append('language', 'eng');
+    // موڈ کے حساب سے زبان منتخب کریں
+    formData.append('language', mode === 'ur-to-en' ? 'urd' : 'eng');
 
     try {
       const res = await fetch('https://api.ocr.space/parse/image', {
@@ -51,11 +52,11 @@ export default function App() {
       const data = await res.json();
       const extracted = data?.ParsedResults?.[0]?.ParsedText || '';
 
-      if (extracted) {
+      if (extracted.trim()) {
         setInputText(extracted);
         translateText(extracted);
       } else {
-        alert("تصویر سے کوئی متن نہیں پڑھا جا سکا!");
+        alert("تصویر سے کوئی متن نہیں پڑھا جا سکا! براہ کرم واضح اور سیدھی تصویر اپ لوڈ کریں۔");
       }
     } catch (err) {
       alert("OCR پروسیسنگ میں مسئلہ آیا!");
@@ -87,7 +88,6 @@ export default function App() {
     <div style={{ padding: '20px', fontFamily: 'sans-serif', textAlign: 'center' }}>
       <h1 style={{ color: '#007bff' }}>Boltranslate App</h1>
 
-      {/* موڈ سلیکٹر */}
       <div style={{ marginBottom: '15px' }}>
         <button
           onClick={() => setMode('ur-to-en')}
@@ -103,7 +103,6 @@ export default function App() {
         </button>
       </div>
 
-      {/* کیمرہ اور مائیک کے بٹن */}
       <div style={{ margin: '15px 0' }}>
         <label style={{ padding: '10px 15px', backgroundColor: '#28a745', color: '#fff', borderRadius: '5px', cursor: 'pointer', marginRight: '10px' }}>
           📷 کیمرہ
